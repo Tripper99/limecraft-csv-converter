@@ -3,7 +3,7 @@
 Limecraft CSV-konverterare
 Konverterar Limecraft transkription CSV-filer till Word-dokument och Inqscribe-filer samt justerar tidskoder.
 Av Dan Josefsson 2025-01-08
-Version 1.7
+Version 1.8
 """
 
 import csv
@@ -31,7 +31,7 @@ except ImportError:
 # Constants
 FRAME_RATE = 30
 TIME_THRESHOLD = 0.01
-VERSION = "1.7"
+VERSION = "1.8"
 REQUIRED_COLUMNS = ['Media Start', 'Transcript', 'Speakers']  # Added Speakers column
 SUPPORTED_ENCODINGS = ['utf-8-sig', 'utf-8', 'latin-1', 'cp1252']
 
