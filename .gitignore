@@ -52,3 +52,6 @@ Old versions/
 # Temporary files
 *.tmp
 *.bak
+
+# CSV files (sensitive data)
+*.csv
