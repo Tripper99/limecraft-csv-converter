@@ -563,7 +563,8 @@ Detta kan vara en fördel om du lägger in bitar från många olika intervjuer i
 Programmet lägger automatiskt till [00:00:00.00] i början av transkriptionen. Alternativt den nya starttid som du själv valt.
 Programmet inkluderar nu även talarnamn från Speakers-kolumnen i utdatafilerna.
 
-Appen är gjord av Dan Josefssson. Buggar rapporteras till dan@josefsson.net.
+Appen är gjord av Dan Josefsson (https://github.com/Tripper99). 
+Buggar rapporteras till dan@josefsson.net.
 
 """
 
