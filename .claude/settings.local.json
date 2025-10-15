@@ -7,7 +7,9 @@
       "Bash(git commit:*)",
       "Bash(gh repo create:*)",
       "Bash(git push:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(python:*)",
+      "Bash(move \"limecraft_converter_1.9.py\" \"limecraft_converter_2.0.py\")"
     ],
     "deny": [],
     "ask": []

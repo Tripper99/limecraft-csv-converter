@@ -3,11 +3,12 @@
 Limecraft CSV-konverterare
 Konverterar Limecraft transkription CSV-filer till Word-dokument och Inqscribe-filer samt justerar tidskoder.
 Av Dan Josefsson 2025-01-08
-Version 56
+Version 2.1
 """
 
 import csv
 import math
+import os
 from pathlib import Path
 import sys
 from typing import Dict, List, Optional
@@ -31,9 +32,20 @@ except ImportError:
 # Constants
 FRAME_RATE = 30
 TIME_THRESHOLD = 0.01
-VERSION = "56"
+VERSION = "2.1"
 REQUIRED_COLUMNS = ['Media Start', 'Transcript', 'Speakers']  # Added Speakers column
 SUPPORTED_ENCODINGS = ['utf-8-sig', 'utf-8', 'latin-1', 'cp1252']
+
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 # Custom Exception Classes
@@ -459,11 +471,30 @@ class LimecraftGUI:
         self.converter = LimecraftConverter()
         self.setup_gui()
 
+    def _set_window_icon(self, window):
+        """Set the egg icon for a window"""
+        try:
+            # Get the correct path for both development and PyInstaller bundled app
+            icon_path = resource_path("Agg-med-smor-v4-transperent.ico")
+
+            if os.path.exists(icon_path):
+                # Use ICO file directly with Tkinter - no PIL needed for ICO files
+                window.iconbitmap(icon_path)
+                print(f"DEBUG: Icon set successfully from {icon_path}")
+            else:
+                print(f"DEBUG: Icon file not found at {icon_path}")
+        except Exception as e:
+            # If icon loading fails, continue without icon
+            print(f"DEBUG: Icon loading failed: {e}")
+
     def setup_gui(self) -> None:
         """Setup the GUI interface"""
         # Create main window with superhero theme
         self.root = tb.Window(themename="superhero")
         self.root.title("Limecraft CSV-konverterare")
+
+        # Set the window icon
+        self._set_window_icon(self.root)
 
         # Get screen dimensions and set appropriate window size
         screen_width = self.root.winfo_screenwidth()
@@ -532,7 +563,6 @@ Detta kan vara en fördel om du lägger in bitar från många olika intervjuer i
 Programmet lägger automatiskt till [00:00:00.00] i början av transkriptionen. Alternativt den nya starttid som du själv valt.
 Programmet inkluderar nu även talarnamn från Speakers-kolumnen i utdatafilerna.
 
-Klicka på Ett ägg med smör i-knappen för att stänga hjälpfönstret.
 """
 
         # Scrollable text widget
@@ -550,11 +580,10 @@ Klicka på Ett ägg med smör i-knappen för att stänga hjälpfönstret.
         try:
             from PIL import Image, ImageTk
 
-            # Try to find the egg image in the same folder as the script
-            script_dir = Path(__file__).parent
-            egg_image_path = script_dir / "Agg_med_smor_v4_transperant.png"
+            # Get the correct path for both development and PyInstaller bundled app
+            egg_image_path = resource_path("Agg_med_smor_v4_transperant.png")
 
-            if egg_image_path.exists():
+            if os.path.exists(egg_image_path):
                 # Load and display the actual PNG image
                 pil_image = Image.open(egg_image_path)
 
@@ -595,6 +624,9 @@ Klicka på Ett ägg med smör i-knappen för att stänga hjälpfönstret.
         help_win.title("Hjälp")
         help_win.geometry("600x900")
 
+        # Set the icon for help window too
+        self._set_window_icon(help_win)
+
         # Center the help window at the same height as the main window
         help_win.update_idletasks()
         main_x = self.root.winfo_x()
@@ -632,7 +664,7 @@ Klicka på Ett ägg med smör i-knappen för att stänga hjälpfönstret.
         self._create_help_image(bottom_frame)
 
         # Close button with the internal joke
-        close_btn = tb.Button(bottom_frame, text="Ett ägg med smör i",
+        close_btn = tb.Button(bottom_frame, text="OK, jag förstår! Stäng fönstret",
                              command=help_win.destroy, bootstyle=DANGER, width=25)
         close_btn.pack()
 
